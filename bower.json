@@ -1,6 +1,6 @@
 {
   "name": "draggable-behavior",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "authors": [
     "Glenn Vandeuren <VandeurenGlenn@gmail.com>"
   ],
@@ -13,7 +13,7 @@
   ],
   "main": "draggable-behavior.html",
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/BasicElements/draggable-behavior/",
+  "homepage": "https://github.com/BasicElements/drag-drop-behaviors/",
   "ignore": [
     "/.*",
     "/test/",
