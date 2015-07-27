@@ -1,0 +1,37 @@
+<!--
+@license
+Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+  <script>
+  /**
+  Use `BasicElements.DragDropBehaviors` to implement an element that can be dragged.
+  @demo
+  @polymerBehavior BasicElements.DragDropBehaviors
+  */
+  var BasicElements = BasicElements || {};
+  // TODO: when dragging element should not be droppable
+  BasicElements.DragDropBehaviors = {
+    hostAttributes: {
+      draggable: 'false',
+      droppable: 'true'
+    },
+
+    properties: {
+      /**
+      * When true, the element is draggable, set to false to disable.
+      */
+      // draggable: {
+      //   type: Boolean,
+      //   observer: '_draggableChanged'
+      // }
+    },
+
+    _draggableChanged: function (draggable) {
+      if (draggable) {
+
+      }
+    }
+  };
+  </script>

@@ -1,0 +1,28 @@
+{
+  "name": "draggable-behavior",
+  "version": "1.0.0",
+  "authors": [
+    "Glenn Vandeuren <VandeurenGlenn@gmail.com>"
+  ],
+  "description": "Implement an element that can be dragged.",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "seed"
+  ],
+  "main": "draggable-behavior.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/BasicElements/draggable-behavior/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"
+  }
+}

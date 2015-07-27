@@ -1,0 +1,125 @@
+<!--
+@license
+Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+  <script>
+  /**
+  Use `BasicElements.DraggableBehavior` to implement an element that can be dragged.
+  @demo
+  @polymerBehavior BasicElements.DraggableBehavior
+  */
+  var BasicElements = BasicElements || {};
+
+  BasicElements.DraggableBehavior = {
+    hostAttributes: {
+      draggable: 'true'
+    },
+
+    properties: {
+      /**
+      * When true, the element is draggable, set to false to disable.
+      */
+      draggable: {
+        type: Boolean,
+        // observer: '_draggableChanged'
+      },
+
+      target: {
+        value: function () {
+          return this;
+        }
+      },
+
+      dataTransfer: String,
+
+      /**
+      * Set the dragged element its position to where it was dragged
+      *
+      */
+      reposition: {
+        type: Boolean,
+        value: true
+      },
+
+      boundToScreen: {
+        type: Boolean,
+        value: true
+      },
+
+      allowScroll: {
+        type: Boolean,
+        value: true
+      },
+
+      coordinates: {
+        type: Object
+      },
+
+      x: String,
+      y: String
+    },
+
+    observers: [
+      '_computeDraggable(draggable, target)',
+      '_setPosition(target, coordinates, reposition)'
+    ],
+
+    _computeDraggable: function (draggable, target) {
+      if (draggable && target) {
+        target.addEventListener('drag', this._onDrag.bind(this));
+      } else {
+        target.removeEventListener('drag');
+      }
+    },
+
+    /**
+    * Performs event.dataTransfer.setData('text', data);
+    */
+    // TODO: Check for types for getting the data
+    _onDrag: function (event) {
+      if (this.reposition) {
+        this.coordinates = {x: event.pageX, y: event.pageY};
+      }
+      this.fire(this.target.localName + '-dragged', {x: event.pageX, y: event.pageY, data: event.target.getAttribute('src')});
+    },
+
+    _setPosition: function (target, coordinates, reposition) {
+      if (reposition) {
+        if (target) {
+          if (!target.offsetWidth) {
+            target.offsetWidth = target.getBoundingClientRect().width;
+          }
+        } else {
+          for (var i = 0; i < this.children.length; i++) {
+            target.offsetWidth = target.children[i].getBoundingClientRect().width;
+          }
+        }
+        // TODO: simplify & add maxHeight, maxWidth
+        if (coordinates.y !== -64 && coordinates.x > 0) {
+          if (this.boundToScreen) {
+            // TODO: create different behavior for drops (repositioning)
+            if(coordinates.x + target.offsetWidth < window.innerWidth && coordinates.y + target.offsetHeight < window.innerHeight) {
+              this._updatePosition(target, coordinates);
+            } else if(!this.allowScroll && coordinates.x + target.offsetWidth < window.innerWidth - 16 && coordinates.y + target.offsetHeight < window.innerHeight){
+              this._updatePosition(target, coordinates);
+            } else if (this.allowScroll && coordinates.x + target.offsetWidth < window.innerWidth - 16){
+              this._updatePosition(target, coordinates);
+            }
+          } else {
+            this._updatePosition(target, coordinates);
+          }
+        }
+
+      }
+
+    },
+
+    _updatePosition: function (target, coordinates) {
+      target.style.left = coordinates.x + 'px';
+      target.style.top = coordinates.y + 'px';
+      target.style.position = 'absolute';
+    }
+  };
+  </script>
