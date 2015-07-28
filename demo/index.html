@@ -16,33 +16,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="elements/demo-img.html">
     <link rel="import" href="elements/drag-drop-window.html">
+    <link rel="import" href="elements/droppable-upload.html">
+    <link rel="import" href="elements/droppable-element.html">
+    <link rel="import" href="elements/uploaded-file.html">
   </head>
   <style>
     body: {
       margin: 0;
     }
-    section: {
-      padding: 18px;
+    section.horizontal {
+      display: flex;
+      box-sizing: border-box;
+      flex-direction: row;
+    }
+    droppable-upload {
+      min-width: 200px;
     }
   </style>
   <body>
 
-    <p>An example of <code>&lt;draggable-behavior&gt;</code>:</p>
+    <h2><code>&lt;drag-drop-behaviors&gt;</code></h2>
 
-    <!-- <section>
+    <h2>A droppable-upload & droppable-element <code>&lt;droppable-upload-behavior&gt;</code></h2>
+    <section class="horizontal">
+      <droppable-upload></droppable-upload>
+      <uploaded-file><uploaded-file>
+    </section>
+
+    <h2>A draggable-element & droppable-element <code>&lt;draggable-behavior&gt;</code>, <code>&lt;droppable-behavior&gt;</code></h2>
+    <section class="horizontal">
       <demo-img src="http://placekitten.com/g/200/300"></demo-img>
-    </section> -->
+      <droppable-element></droppable-element>
+    </section>
 
+    <h2>A window with draggable 'children'<code>&lt;drop-area-behavior&gt;</code>, <code>&lt;draggable-behavior&gt;</code></h2>
     <drag-drop-window>
       <demo-img id="demoImg" src="http://placekitten.com/g/200/300"></demo-img>
       <demo-img id="demoImg2" src="http://placekitten.com/g/200/300"></demo-img>
     </drag-drop-window>
-
-    <script>
-      document.addEventListener('position-changed', function (event) {
-        // console.log(event.detail);
-      });
-    </script>
 
   </body>
 </html>
