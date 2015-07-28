@@ -9,7 +9,7 @@ Copyright (c) 2015 The BasicElements Project Authors. All rights reserved.
 <script>
 var BasicElements = BasicElements || {};
 
-  BasicElements.droppableUploadBehaviorImpl = {
+  BasicElements.DroppableUploadBehaviorImpl = {
     /**
     * Note, this behavior expects some features that are not supported by all browsers, Currently working on a Feature(& Droppable)NotSupportedBehavior.
     *
@@ -24,7 +24,9 @@ var BasicElements = BasicElements || {};
       data: {
         type: String,
         notify: true
-      }
+      },
+
+      supported: Object
     },
 
     listeners: {
@@ -73,9 +75,9 @@ var BasicElements = BasicElements || {};
     }
   };
 
-  BasicElements.droppableUploadBehavior = [
+  BasicElements.DroppableUploadBehavior = [
     BasicElements.BrowserFeaturesBehavior,
-    BasicElements.droppableUploadBehaviorImpl
+    BasicElements.DroppableUploadBehaviorImpl
   ];
 
 </script>
