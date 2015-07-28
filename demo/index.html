@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <title>draggable-behavior Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="elements/demo-img.html">
-    <!-- <link rel="import" href="elements/drag-drop-window.html"> -->
+    <link rel="import" href="elements/drag-drop-window.html">
   </head>
   <style>
     body: {
@@ -29,12 +29,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <p>An example of <code>&lt;draggable-behavior&gt;</code>:</p>
 
-    <section>
+    <!-- <section>
       <demo-img src="http://placekitten.com/g/200/300"></demo-img>
-    </section>
+    </section> -->
 
-    <!-- <drag-drop-window src="http://placekitten.com/g/200/300">
-    </drag-drop-window> -->
+    <drag-drop-window>
+      <demo-img id="demoImg" src="http://placekitten.com/g/200/300"></demo-img>
+      <demo-img id="demoImg2" src="http://placekitten.com/g/200/300"></demo-img>
+    </drag-drop-window>
 
     <script>
       document.addEventListener('position-changed', function (event) {
