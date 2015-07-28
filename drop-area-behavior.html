@@ -1,0 +1,73 @@
+<!--
+@license
+Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+  <script>
+  /**
+  Use `BasicElements.DropAreaBehavior` to implement an element that can be dragged.
+  @demo
+  @polymerBehavior BasicElements.DropAreaBehavior
+  */
+  var BasicElements = BasicElements || {};
+
+  BasicElements.DropAreaBehavior = {
+    hostAttributes: {
+      droppable: 'true'
+    },
+
+    properties: {
+      /**
+      * When true, the element is draggable, set to false to disable.
+      */
+      droppable: {
+        type: Boolean,
+        // observer: '_draggableChanged'
+      },
+
+      boundToScreen: {
+        type: Boolean,
+        value: true
+      },
+
+      allowScroll: {
+        type: Boolean,
+        value: true
+      }
+    },
+
+    attached: function () {
+      for (var i = 0; i < Polymer.dom(this).children.length; i++) {
+        Polymer.dom(this).children[i].setAttribute('by-id', '');
+        this.addEventListener(Polymer.dom(this).children[i].getAttribute('id') + '-dragged', this._setPosition.bind(this, Polymer.dom(this).children[i]));
+      }
+    },
+
+    _setPosition: function (target, event) {
+      var el_x = event.detail.x;
+      var el_y = event.detail.y;
+      // TODO: simplify & add maxHeight, maxWidth
+      if (el_y !== -64 && el_x > 0) {
+        if (this.boundToScreen) {
+          // TODO: create different behavior for drops (repositioning)
+          if(el_x + target.offsetWidth < window.innerWidth && el_y + target.offsetHeight < window.innerHeight) {
+            this._updatePosition(target, el_x, el_y);
+          } else if(!this.allowScroll && el_x + target.offsetWidth < window.innerWidth - 16 && el_y + target.offsetHeight < window.innerHeight){
+            this._updatePosition(target, el_x, el_y);
+          } else if (this.allowScroll && el_x + target.offsetWidth < window.innerWidth - 16){
+            this._updatePosition(target, el_x, el_y);
+          }
+        } else {
+          this._updatePosition(target, {x: el_x, y: el_y});
+        }
+      }
+    },
+
+    _updatePosition: function (target, x, y) {
+      target.style.left = x + 'px';
+      target.style.top = y + 'px';
+      target.style.position = 'absolute';
+    }
+  };
+  </script>
