@@ -13,19 +13,19 @@ Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
   var BasicElements = BasicElements || {};
 
   BasicElements.DraggableBehavior = {
-    hostAttributes: {
-      draggable: 'true'
-    },
 
     properties: {
       /**
-      * When true, the element is draggable, set to false to disable.
+      * Set to false to disable dragging.
       */
       draggable: {
         type: Boolean,
-        // observer: '_draggableChanged'
+        value: true
       },
 
+      /**
+      * Set another target to enable dragging on.
+      */
       target: {
         value: function () {
           return this;
@@ -34,92 +34,50 @@ Copyright (c) 2015 Glenn Vandeuren. All rights reserved.
 
       dataTransfer: String,
 
-      /**
-      * Set the dragged element its position to where it was dragged
-      *
-      */
-      reposition: {
+      byId: {
         type: Boolean,
-        value: true
+        value: false
       },
 
-      boundToScreen: {
-        type: Boolean,
-        value: true
-      },
-
-      allowScroll: {
-        type: Boolean,
-        value: true
-      },
-
-      coordinates: {
-        type: Object
-      },
-
-      x: String,
-      y: String
+      transferData: {
+        type: String,
+        value: 'src'
+      }
     },
 
     observers: [
-      '_computeDraggable(draggable, target)',
-      '_setPosition(target, coordinates, reposition)'
+      '_computeDraggable(draggable, target)'
     ],
 
     _computeDraggable: function (draggable, target) {
       if (draggable && target) {
+        Polymer.dom(target).setAttribute('draggable', true);
         target.addEventListener('drag', this._onDrag.bind(this));
-      } else {
+      } else if(!draggable && target) {
+        Polymer.dom(target).setAttribute('draggable', false);
         target.removeEventListener('drag');
+      }
+    },
+
+    detached: function () {
+      Polymer.dom(this.target).removeEventListener('drag');
+      if (this.byId) {
+        Polymer.dom(this).parentNode.removeEventListener(Polymer.dom(this.target).getAttribute('id') + '-dragged');
       }
     },
 
     /**
     * Performs event.dataTransfer.setData('text', data);
     */
-    // TODO: Check for types for getting the data
+    // TODO: Check types for getting the data
     _onDrag: function (event) {
-      if (this.reposition) {
-        this.coordinates = {x: event.pageX, y: event.pageY};
+      var data = event.target.getAttribute(this.transferData);
+      event.dataTransfer.setData('text', data);
+      if (this.byId) {
+        this.fire(Polymer.dom(event).localTarget.getAttribute('id') + '-dragged', {x: event.pageX, y: event.pageY, data: data});
+      } else {
+        this.fire(Polymer.dom(event).localTarget.localName + '-dragged', {x: event.pageX, y: event.pageY, data: data});
       }
-      this.fire(this.target.localName + '-dragged', {x: event.pageX, y: event.pageY, data: event.target.getAttribute('src')});
-    },
-
-    _setPosition: function (target, coordinates, reposition) {
-      if (reposition) {
-        if (target) {
-          if (!target.offsetWidth) {
-            target.offsetWidth = target.getBoundingClientRect().width;
-          }
-        } else {
-          for (var i = 0; i < this.children.length; i++) {
-            target.offsetWidth = target.children[i].getBoundingClientRect().width;
-          }
-        }
-        // TODO: simplify & add maxHeight, maxWidth
-        if (coordinates.y !== -64 && coordinates.x > 0) {
-          if (this.boundToScreen) {
-            // TODO: create different behavior for drops (repositioning)
-            if(coordinates.x + target.offsetWidth < window.innerWidth && coordinates.y + target.offsetHeight < window.innerHeight) {
-              this._updatePosition(target, coordinates);
-            } else if(!this.allowScroll && coordinates.x + target.offsetWidth < window.innerWidth - 16 && coordinates.y + target.offsetHeight < window.innerHeight){
-              this._updatePosition(target, coordinates);
-            } else if (this.allowScroll && coordinates.x + target.offsetWidth < window.innerWidth - 16){
-              this._updatePosition(target, coordinates);
-            }
-          } else {
-            this._updatePosition(target, coordinates);
-          }
-        }
-
-      }
-
-    },
-
-    _updatePosition: function (target, coordinates) {
-      target.style.left = coordinates.x + 'px';
-      target.style.top = coordinates.y + 'px';
-      target.style.position = 'absolute';
     }
   };
   </script>
